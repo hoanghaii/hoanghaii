@@ -1,0 +1,900 @@
+function renameFolderAndFile() {
+  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var currentSheet = ss.getSheetByName("RenameSheet");
+  currentSheet.activate();
+
+  for(i = 549; i <= 556; i++){
+    var file = DriveApp.getFileById(currentSheet.getRange(i,17,1,1).getValue());
+    file.setName(currentSheet.getRange(i,13,1,1).getValue());
+  }
+  
+  
+}
+
+function listAll1() {
+  var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+
+
+  var sheet = activeSpreadsheet.getSheetByName("VietTechDay2021");
+  if(sheet != null){
+    var date = new Date();
+    var date = Utilities.formatDate(new Date(), "GMT+9", "dd.MM.yyyy")
+    sheet.setName("VietTechDay2021_"+date);
+  }
+
+  SpreadsheetApp.flush();
+  var currentSheet = activeSpreadsheet.insertSheet('VietTechDay2021');
+  SpreadsheetApp.flush();
+
+  var folderId = '1uBvktIfyZGATiRSm8p83MjDZ82Z5uZFq'; //Google ID của Folder VietTechDay
+  currentSheet.appendRow([,"Folder/File Name",,,,,,,,,,,,,,"URL"]);
+  var list = [];
+  var excluded = [];
+  var parent = DriveApp.getFolderById(folderId);
+  var parentName = DriveApp.getFolderById(folderId).getName();
+  getChildFolders(parentName, parent, currentSheet, list, excluded,false, 0, 600);
+  //set a marker once completed                 
+  SpreadsheetApp.flush();
+}
+
+// ======================================================================================================
+
+function listAll2() {
+  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var currentSheet = ss.getSheetByName("VietTechDay2021");
+  currentSheet.activate();
+
+  var folderId = '1uBvktIfyZGATiRSm8p83MjDZ82Z5uZFq'; //Google ID của Folder VietTechDay
+  var list = [];
+  var excluded = [];
+  var parent = DriveApp.getFolderById(folderId);
+  var parentName = DriveApp.getFolderById(folderId).getName();
+  getChildFolders(parentName, parent, currentSheet, list, excluded, true, 601, 1200);
+
+  //set a marker once completed                 
+  SpreadsheetApp.flush();
+  
+
+}
+// ======================================================================================================
+
+function listAll3() {
+  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var currentSheet = ss.getSheetByName("VietTechDay2021");
+  currentSheet.activate();
+
+  var folderId = '1uBvktIfyZGATiRSm8p83MjDZ82Z5uZFq'; //Google ID của Folder VietTechDay
+  var list = [];
+  var excluded = [];
+  var parent = DriveApp.getFolderById(folderId);
+  var parentName = DriveApp.getFolderById(folderId).getName();
+  getChildFolders(parentName, parent, currentSheet, list, excluded, true, 1201, 1700);
+
+  //set a marker once completed     
+  var marker = 'All files has been listed by ';
+  SpreadsheetApp.setActiveSheet(currentSheet).getRange(currentSheet.getLastRow()+1,1).setValue(marker + new Date()).setFontColor("#ff0000");             
+  SpreadsheetApp.flush();
+
+  
+
+}
+
+
+//function setColor(currentSheet){
+  
+function setColor1(){
+  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var currentSheet = ss.getSheetByName("VietTechDay2021");
+  currentSheet.activate();
+  
+ // var colorLevel1 = '#C0C0C0';
+ // var colorLevel2 = '#D3D3D3';
+ // var colorLevel3 = '#DCDCDC';  
+ // var colorLevel4 = '#F5F5F5';
+ // var colorLevel5 = '#FFFFFF';
+ // var colorLevel6 = '#FFFFFF';
+ // var colorLevel7 = '#FFFFFF';
+ // var colorLevel8 = '#FFFFFF';
+ // var colorLevel9 = '#FFFFFF';
+ // var colorLevel10 = '#FFFFFF';
+ // var colorLevel11 = '#FFFFFF';
+
+   var colorLevel1 = '#778899';
+   var colorLevel2 = '#B0C4DE';
+   var colorLevel3 = '#E6E6FA';  
+   var colorLevel4 = '#FFFAF0';
+   var colorLevel5 = '#F0F8FF';
+   var colorLevel6 = '#F8F8FF';
+   var colorLevel7 = '#F0FFF0';
+   var colorLevel8 = '#c4dde0';
+   var colorLevel9 = '#FFFFF0';
+   var colorLevel10 = '#F0FFFF';
+   var colorLevel11 = '#FFFAFA';
+  
+  // var colorLevel1 = '#549da5';
+  // var colorLevel2 = '#62afb7';
+  // var colorLevel3 = '#6fbdc6';  
+  // var colorLevel4 = '#81c6cd';
+  // var colorLevel5 = '#94d3da';
+  // var colorLevel6 = '#a3d1d6';
+  // var colorLevel7 = '#b2e4ea';
+  // var colorLevel8 = '#c4dde0';
+  // var colorLevel9 = '#cfeef1';
+  // var colorLevel10 = '#e8f0f1';
+  // var colorLevel11 = '#f2fafb';
+
+  for(i=2; i<=900; i++){
+    var level = currentSheet.getRange(i,1,1,1).getValue();
+    if(level == '1'){
+      currentSheet.getRange(i,2,1,15).setBackground(colorLevel1);
+    } else
+    if(level == '2'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,14).setBackground(colorLevel2);
+    } else
+    if(level == '3'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,13).setBackground(colorLevel3);
+    }else
+    if(level == '4'){
+      currentSheet.getRange(i,2,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,12).setBackground(colorLevel4);
+    }else
+    if(level == '5'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,11).setBackground(colorLevel5);
+    }else
+    if(level == '6'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,10).setBackground(colorLevel6);
+    }else
+    if(level == '7'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,1).setBackground(colorLevel6);
+      currentSheet.getRange(i,8,1,9).setBackground(colorLevel7);
+    }else
+    if(level == '8'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,1).setBackground(colorLevel6);
+      currentSheet.getRange(i,8,1,1).setBackground(colorLevel7);
+      currentSheet.getRange(i,9,1,8).setBackground(colorLevel8);
+    }else
+    if(level == '9'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,1).setBackground(colorLevel6);
+      currentSheet.getRange(i,8,1,1).setBackground(colorLevel7);
+      currentSheet.getRange(i,9,1,1).setBackground(colorLevel8);
+      currentSheet.getRange(i,10,1,7).setBackground(colorLevel9);
+    }else
+    if(level == '10'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,1).setBackground(colorLevel6);
+      currentSheet.getRange(i,8,1,1).setBackground(colorLevel7);
+      currentSheet.getRange(i,9,1,1).setBackground(colorLevel8);
+      currentSheet.getRange(i,10,1,1).setBackground(colorLevel9);
+      currentSheet.getRange(i,11,1,6).setBackground(colorLevel10);
+    }
+    else{
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,1).setBackground(colorLevel6);
+      currentSheet.getRange(i,8,1,1).setBackground(colorLevel7);
+      currentSheet.getRange(i,9,1,1).setBackground(colorLevel8);
+      currentSheet.getRange(i,10,1,1).setBackground(colorLevel9);
+      currentSheet.getRange(i,11,1,1).setBackground(colorLevel10);
+      currentSheet.getRange(i,12,1,5).setBackground(colorLevel11);
+    }
+    
+  }
+//  afterSeiri(currentSheet)
+}
+ // ======================================================================================================
+function setColor2(){
+  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var currentSheet = ss.getSheetByName("VietTechDay2021");
+  currentSheet.activate();
+  
+ // var colorLevel1 = '#C0C0C0';
+ // var colorLevel2 = '#D3D3D3';
+ // var colorLevel3 = '#DCDCDC';  
+ // var colorLevel4 = '#F5F5F5';
+ // var colorLevel5 = '#FFFFFF';
+ // var colorLevel6 = '#FFFFFF';
+ // var colorLevel7 = '#FFFFFF';
+ // var colorLevel8 = '#FFFFFF';
+ // var colorLevel9 = '#FFFFFF';
+ // var colorLevel10 = '#FFFFFF';
+ // var colorLevel11 = '#FFFFFF';
+
+   var colorLevel1 = '#778899';
+   var colorLevel2 = '#B0C4DE';
+   var colorLevel3 = '#E6E6FA';  
+   var colorLevel4 = '#FFFAF0';
+   var colorLevel5 = '#F0F8FF';
+   var colorLevel6 = '#F8F8FF';
+   var colorLevel7 = '#F0FFF0';
+   var colorLevel8 = '#c4dde0';
+   var colorLevel9 = '#FFFFF0';
+   var colorLevel10 = '#F0FFFF';
+   var colorLevel11 = '#FFFAFA';
+  
+  // var colorLevel1 = '#549da5';
+  // var colorLevel2 = '#62afb7';
+  // var colorLevel3 = '#6fbdc6';  
+  // var colorLevel4 = '#81c6cd';
+  // var colorLevel5 = '#94d3da';
+  // var colorLevel6 = '#a3d1d6';
+  // var colorLevel7 = '#b2e4ea';
+  // var colorLevel8 = '#c4dde0';
+  // var colorLevel9 = '#cfeef1';
+  // var colorLevel10 = '#e8f0f1';
+  // var colorLevel11 = '#f2fafb';
+
+  for(i=899; i<currentSheet.getLastRow(); i++){
+    var level = currentSheet.getRange(i,1,1,1).getValue();
+    if(level == '1'){
+      currentSheet.getRange(i,2,1,15).setBackground(colorLevel1);
+    } else
+    if(level == '2'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,14).setBackground(colorLevel2);
+    } else
+    if(level == '3'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,13).setBackground(colorLevel3);
+    }else
+    if(level == '4'){
+      currentSheet.getRange(i,2,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,12).setBackground(colorLevel4);
+    }else
+    if(level == '5'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,11).setBackground(colorLevel5);
+    }else
+    if(level == '6'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,10).setBackground(colorLevel6);
+    }else
+    if(level == '7'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,1).setBackground(colorLevel6);
+      currentSheet.getRange(i,8,1,9).setBackground(colorLevel7);
+    }else
+    if(level == '8'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,1).setBackground(colorLevel6);
+      currentSheet.getRange(i,8,1,1).setBackground(colorLevel7);
+      currentSheet.getRange(i,9,1,8).setBackground(colorLevel8);
+    }else
+    if(level == '9'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,1).setBackground(colorLevel6);
+      currentSheet.getRange(i,8,1,1).setBackground(colorLevel7);
+      currentSheet.getRange(i,9,1,1).setBackground(colorLevel8);
+      currentSheet.getRange(i,10,1,7).setBackground(colorLevel9);
+    }else
+    if(level == '10'){
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,1).setBackground(colorLevel6);
+      currentSheet.getRange(i,8,1,1).setBackground(colorLevel7);
+      currentSheet.getRange(i,9,1,1).setBackground(colorLevel8);
+      currentSheet.getRange(i,10,1,1).setBackground(colorLevel9);
+      currentSheet.getRange(i,11,1,6).setBackground(colorLevel10);
+    }
+    else{
+      currentSheet.getRange(i,2,1,1).setBackground(colorLevel1);
+      currentSheet.getRange(i,3,1,1).setBackground(colorLevel2);
+      currentSheet.getRange(i,4,1,1).setBackground(colorLevel3);
+      currentSheet.getRange(i,5,1,1).setBackground(colorLevel4);
+      currentSheet.getRange(i,6,1,1).setBackground(colorLevel5);
+      currentSheet.getRange(i,7,1,1).setBackground(colorLevel6);
+      currentSheet.getRange(i,8,1,1).setBackground(colorLevel7);
+      currentSheet.getRange(i,9,1,1).setBackground(colorLevel8);
+      currentSheet.getRange(i,10,1,1).setBackground(colorLevel9);
+      currentSheet.getRange(i,11,1,1).setBackground(colorLevel10);
+      currentSheet.getRange(i,12,1,5).setBackground(colorLevel11);
+    }
+    
+  }
+  afterSeiri(currentSheet)
+}
+
+function afterSeiri(currentSheet){
+  
+    
+  currentSheet.getRange(1,1,currentSheet.getLastRow(),1).setBorder(false,false,false,null,false,false);
+  currentSheet.getRange(1,1,currentSheet.getLastRow()-1,1).clearContent();
+  //currentSheet.deleteRows(currentSheet.getLastRow()+1,currentSheet.getMaxRows()-currentSheet.getLastRow()-1);
+  currentSheet.deleteColumns(currentSheet.getLastColumn()+1, currentSheet.getMaxColumns()-currentSheet.getLastColumn()-1);
+  currentSheet.setColumnWidth(1,30);
+  currentSheet.setColumnWidth(17,30);
+  currentSheet.setHiddenGridlines(true);
+  currentSheet.insertRowBefore(1);
+  currentSheet.getRange(2,2,1,14).mergeAcross();
+  currentSheet.getRange(2,2,1,14).setBorder(true,true,true,true,null,null).setBackground("#FFA500");
+  currentSheet.getRange(2,16,1,1).setBackground("#FFA500");
+  currentSheet.getRange(2,2,1,14).setHorizontalAlignment("center");
+  currentSheet.getRange(2,16,1,1).setHorizontalAlignment("center");
+}
+
+// ======================================================================================================
+
+//function seiri(currentSheet){
+function seiri1(){
+  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var currentSheet = ss.getSheetByName("VietTechDay2021");
+  currentSheet.activate();
+  var lastRow = currentSheet.getLastRow();
+
+
+  currentSheet.getRange(1,1,1,16).setBorder(true,true,true,true,false,false);
+  currentSheet.getRange(2,1,lastRow-2,16).setBorder(true,true,true,true,false,true);
+  currentSheet.setColumnWidths(2,15,33);
+  currentSheet.setColumnWidths(16,1,200);
+  currentSheet.setColumnWidths(1,1,50);
+
+  currentSheet.getRange("P:P").setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
+
+
+  for(i=2; i<=250; i++){
+    for(j=2; j<=15; j++){
+      var rightCell = currentSheet.getRange(i,j+1,1,1).getValue(); 
+      var currentCell = currentSheet.getRange(i,j,1,1);
+      var currentCellValue = currentSheet.getRange(i,j,1,1).getValue();
+
+      if(currentCellValue != ''){
+        currentCell.setBorder(null,true,null,null,null,null);
+        continue;
+      }
+      if(currentCellValue == '' && rightCell != '' && j!=15){
+        for(k=2; k<=j; k++){
+          currentSheet.getRange(i,k,1,1).setBorder(false,true,null,true,null,null);
+        }
+      }
+    }
+  }
+}
+// ======================================================================================================
+
+
+function seiri2(){
+  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var currentSheet = ss.getSheetByName("VietTechDay2021");
+  currentSheet.activate();
+
+
+  for(i=249; i<=500; i++){
+    for(j=2; j<=15; j++){
+      var rightCell = currentSheet.getRange(i,j+1,1,1).getValue(); 
+      var currentCell = currentSheet.getRange(i,j,1,1);
+      var currentCellValue = currentSheet.getRange(i,j,1,1).getValue();
+
+      if(currentCellValue != ''){
+        currentCell.setBorder(null,true,null,null,null,null);
+        continue;
+      }
+      if(currentCellValue == '' && rightCell != '' && j!=15){
+        for(k=2; k<=j; k++){
+          currentSheet.getRange(i,k,1,1).setBorder(false,true,null,true,null,null);
+        }
+      }
+    }
+  }
+}
+
+// ======================================================================================================
+
+
+function seiri3(){
+  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var currentSheet = ss.getSheetByName("VietTechDay2021");
+  currentSheet.activate();
+
+
+  for(i=499; i<=750; i++){
+    for(j=2; j<=15; j++){
+      var rightCell = currentSheet.getRange(i,j+1,1,1).getValue(); 
+      var currentCell = currentSheet.getRange(i,j,1,1);
+      var currentCellValue = currentSheet.getRange(i,j,1,1).getValue();
+
+      if(currentCellValue != ''){
+        currentCell.setBorder(null,true,null,null,null,null);
+        continue;
+      }
+      if(currentCellValue == '' && rightCell != '' && j!=15){
+        for(k=2; k<=j; k++){
+          currentSheet.getRange(i,k,1,1).setBorder(false,true,null,true,null,null);
+        }
+      }
+    }
+  }
+}
+// ======================================================================================================
+
+
+function seiri4(){
+  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var currentSheet = ss.getSheetByName("VietTechDay2021");
+  currentSheet.activate();
+
+
+  for(i=749; i<=1000; i++){
+    for(j=2; j<=15; j++){
+      var rightCell = currentSheet.getRange(i,j+1,1,1).getValue(); 
+      var currentCell = currentSheet.getRange(i,j,1,1);
+      var currentCellValue = currentSheet.getRange(i,j,1,1).getValue();
+
+      if(currentCellValue != ''){
+        currentCell.setBorder(null,true,null,null,null,null);
+        continue;
+      }
+      if(currentCellValue == '' && rightCell != '' && j!=15){
+        for(k=2; k<=j; k++){
+          currentSheet.getRange(i,k,1,1).setBorder(false,true,null,true,null,null);
+        }
+      }
+    }
+  }
+}
+// ======================================================================================================
+
+
+function seiri5(){
+  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var currentSheet = ss.getSheetByName("VietTechDay2021");
+  currentSheet.activate();
+
+
+  for(i=999; i<=1250; i++){
+    for(j=2; j<=15; j++){
+      var rightCell = currentSheet.getRange(i,j+1,1,1).getValue(); 
+      var currentCell = currentSheet.getRange(i,j,1,1);
+      var currentCellValue = currentSheet.getRange(i,j,1,1).getValue();
+
+      if(currentCellValue != ''){
+        currentCell.setBorder(null,true,null,null,null,null);
+        continue;
+      }
+      if(currentCellValue == '' && rightCell != '' && j!=15){
+        for(k=2; k<=j; k++){
+          currentSheet.getRange(i,k,1,1).setBorder(false,true,null,true,null,null);
+        }
+      }
+    }
+  }
+}
+
+// ======================================================================================================
+
+function seiri6(){
+  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var currentSheet = ss.getSheetByName("VietTechDay2021");
+  currentSheet.activate();
+
+
+  for(i=1249; i<currentSheet.getLastRow(); i++){
+    for(j=2; j<=15; j++){
+      var rightCell = currentSheet.getRange(i,j+1,1,1).getValue(); 
+      var currentCell = currentSheet.getRange(i,j,1,1);
+      var currentCellValue = currentSheet.getRange(i,j,1,1).getValue();
+
+      if(currentCellValue != ''){
+        currentCell.setBorder(null,true,null,null,null,null);
+        continue;
+      }
+      if(currentCellValue == '' && rightCell != '' && j!=15){
+        for(k=2; k<=j; k++){
+          currentSheet.getRange(i,k,1,1).setBorder(false,true,null,true,null,null);
+        }
+      }
+    }
+  }
+}
+// ======================================================================================================
+
+function getSorted(it) {
+  var l = [];
+
+  while (it.hasNext()) {
+    var f = it.next();
+    l.push(f);
+  }
+
+  return l.sort(function(a, b) {
+    if (a.getName() < b.getName()) {
+      return -1;
+    }
+    if (a.getName() > b.getName()) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
+// ======================================================================================================
+function checkStopWriting(currentRow, startNum, endNum){
+  if(currentRow < startNum){
+    // console.log(currentRow + ",1" );
+    return 1;
+
+  }else if((currentRow >= startNum) && (currentRow <= endNum)){
+    // console.log(currentRow + ",2" );
+    return 2;
+  }else{
+    // console.log(currentRow + ",3" );
+    return 3;
+  }
+}
+
+function getChildFolders(parentName, parent, sheet, voidFolder, excluded, truyenThongFlag, startNum, endNum){
+  var childFolders1 = getSorted(parent.getFolders());
+
+  var currentRow = 0;
+
+  for(i_0=0; i_0<childFolders1.length; i_0++){
+    currentRow++;
+    if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+      var folderID1 = childFolders1[i_0].getId();
+      var folderName1 = childFolders1[i_0].getName();      
+      var URL1 = "https://drive.google.com/open?id=" + folderID1;
+      var data = [1,folderName1,,,,,,,,,,,,,,URL1];
+      sheet.appendRow(data);
+    }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+      return;
+    }
+
+    var childFolders2 = getSorted(childFolders1[i_0].getFolders());
+
+    for(i_1=0; i_1<childFolders2.length; i_1++){
+       currentRow++;
+      if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+        var folderID2 = childFolders2[i_1].getId();
+        var folderName2 = childFolders2[i_1].getName();        
+        var URL2 = "https://drive.google.com/open?id=" + folderID2;
+        var data = [2,,folderName2,,,,,,,,,,,,,URL2];
+        sheet.appendRow(data);
+      }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+        return;
+      }
+      var childFolders3 = getSorted(childFolders2[i_1].getFolders());
+
+      for(i_2=0; i_2<childFolders3.length; i_2++){
+        currentRow++;
+        if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+          var folderID3 = childFolders3[i_2].getId();
+          var folderName3 = childFolders3[i_2].getName();
+          var URL3 = "https://drive.google.com/open?id=" + folderID3;
+          var data = [3,,,folderName3,,,,,,,,,,,,URL3];          
+          sheet.appendRow(data);
+        }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+          return;
+        }
+        var childFolders4 = getSorted(childFolders3[i_2].getFolders());
+
+        for(i_3=0; i_3<childFolders4.length; i_3++){
+          currentRow++;
+          if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+            var folderID4 = childFolders4[i_3].getId();
+            var folderName4 = childFolders4[i_3].getName();
+            var URL4 = "https://drive.google.com/open?id=" + folderID4;
+            var data = [4,,,,folderName4,,,,,,,,,,,URL4];
+            sheet.appendRow(data);
+          }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+            return;
+          }
+          var childFolders5 = getSorted(childFolders4[i_3].getFolders());
+
+            for(i_4=0; i_4<childFolders5.length; i_4++){
+              currentRow++;
+              if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                var folderID5 = childFolders5[i_4].getId();
+                var folderName5 = childFolders5[i_4].getName();
+                var URL5 = "https://drive.google.com/open?id=" + folderID5;
+                var data = [5,,,,,folderName5,,,,,,,,,,URL5];
+                sheet.appendRow(data);
+              }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                return;
+              }              
+              var childFolders6 = getSorted(childFolders5[i_4].getFolders());
+
+              for(i_5=0; i_5<childFolders6.length; i_5++){
+                currentRow++;
+                if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                  var folderID6 = childFolders6[i_5].getId();
+                  var folderName6 = childFolders6[i_5].getName();
+                  var URL6 = "https://drive.google.com/open?id=" + folderID6;
+                  var data = [6,,,,,,folderName6,,,,,,,,,URL6];
+                  sheet.appendRow(data);
+                }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                  return;
+                }                
+                var childFolders7 = getSorted(childFolders6[i_5].getFolders());
+
+                for(i_6=0; i_6<childFolders7.length; i_6++){
+                  currentRow++;
+                  if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                    var folderID7 = childFolders7[i_6].getId();
+                    var folderName7 = childFolders7[i_6].getName();
+                    var URL7 = "https://drive.google.com/open?id=" + folderID7;
+                    var data = [7,,,,,,,folderName7,,,,,,,,URL7];
+                    sheet.appendRow(data);
+                  }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                    return;
+                  }                  
+                  var childFolders8 = getSorted(childFolders7[i_6].getFolders());
+
+                  for(i_7=0; i_7<childFolders8.length; i_7++){
+                    currentRow++;
+                    if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                      var folderID8 = childFolders8[i_7].getId();
+                      var folderName8 = childFolders8[i_7].getName();
+                      var URL8 = "https://drive.google.com/open?id=" + folderID8;
+                      var data = [8,,,,,,,,folderName8,,,,,,,URL8];
+                      sheet.appendRow(data);
+                    }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                      return;
+                    }                    
+                    var childFolders9 = getSorted(childFolders8[i_7].getFolders());
+
+                    var files8 = getSorted(childFolders8[i_7].getFiles());
+                    for(i_8=0; i_8<childFolders9.length; i_8++){
+                      currentRow++;
+                      if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                        var folderID9 = childFolders9[i_8].getId();
+                        var folderName9 = childFolders9[i_8].getName();
+                        var URL9 = "https://drive.google.com/open?id=" + folderID9;
+                        var data = [9,,,,,,,,,folderName9,,,,,,URL9];
+                        sheet.appendRow(data);
+                      }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                        return;
+                      }
+                      var childFolders10 = getSorted(childFolders9[i_8].getFolders());
+
+                      for(i_9=0; i_9<childFolders10.length; i_9++){
+                        currentRow++;
+
+                        if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                          var folderID10 = childFolders10[i_9].getId();
+                          var folderName10 = childFolders10[i_9].getName();
+                          var fullPath10 = fullPath9 + " |--> " + folderName10;
+                          var URL10 = "https://drive.google.com/open?id=" + folderID10;
+                          var data = [10,,,,,,,,,,folderName10,,,,,URL10];
+                          sheet.appendRow(data);
+                        }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                          return;
+                        }                        
+
+                        var files10 = getSorted(childFolders10[i_9].getFiles());
+                        for(i=0; i<files10.length; i++){
+                          currentRow++;
+
+                          if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                            var childFile = files10[i];
+                            var fileName = files10[i].getName();
+                            var path = fullPath10 + " |--> " + fileName;
+                            var fileID = childFile.getId();
+                            var Url = "https://drive.google.com/open?id=" + fileID;
+                            var output = [11,,,,,,,,,,,fileName,,,,Url];
+                            sheet.appendRow(output);
+                          }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                            return;
+                          }                            
+                        }
+                      }
+                      var files9 = getSorted(childFolders9[i_8].getFiles());
+                      for(i=0; i<files9.length; i++){
+                        currentRow++;
+                        if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                          var childFile = files9[i];
+                          var fileName = files9[i].getName();
+                          var path = fullPath9 + " |--> " + fileName;
+                          var fileID = childFile.getId();
+                          var Url = "https://drive.google.com/open?id=" + fileID;
+                          var output = [10,,,,,,,,,,fileName,,,,,Url];
+                          sheet.appendRow(output);
+                        }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                          return;
+                        }                          
+                      }
+                      
+                    }
+                    for(i=0; i<files8.length; i++){
+                      currentRow++;
+                      if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                        var childFile = files8[i];
+                        var fileName = files8[i].getName();
+                        var fileID = childFile.getId();
+                        var Url = "https://drive.google.com/open?id=" + fileID;
+                        var output = [9,,,,,,,,,fileName,,,,,,Url];                        
+                        sheet.appendRow(output);
+                      }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                        return;
+                      }                      
+                    }
+                  }
+                  var files7 = getSorted(childFolders7[i_6].getFiles());
+                  for(i=0; i<files7.length; i++){
+                    currentRow++;
+                    if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                      var childFile = files7[i];
+                      var fileName = files7[i].getName();
+                      var fileID = childFile.getId();
+                      var Url = "https://drive.google.com/open?id=" + fileID;
+                      var output = [8,,,,,,,,fileName,,,,,,,Url]
+                      sheet.appendRow(output);
+                    }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                      return;
+                    }                    
+                  }
+                }
+                var files6 = getSorted(childFolders6[i_5].getFiles());
+                for(i=0; i<files6.length; i++){
+
+                  currentRow++;
+                  if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                    var childFile = files6[i];
+                    var fileName = files6[i].getName();
+                    var fileID = childFile.getId();
+                    var Url = "https://drive.google.com/open?id=" + fileID;
+                    var output = [7,,,,,,,fileName,,,,,,,,Url];                    
+                    sheet.appendRow(output);
+                  }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                    return;
+                  }                  
+                }
+              }
+            var files5 = getSorted(childFolders5[i_4].getFiles());
+            for(i=0; i<files5.length; i++){
+
+              currentRow++;
+              if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+                var childFile = files5[i];
+                var fileName = files5[i].getName();
+                var fileID = childFile.getId();
+                var Url = "https://drive.google.com/open?id=" + fileID;
+                var output = [6,,,,,,fileName,,,,,,,,,Url];                
+                sheet.appendRow(output);
+              }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+                return;
+              }              
+            }
+          }
+          var files4 = getSorted(childFolders4[i_3].getFiles());
+          for(i=0; i<files4.length; i++){
+
+            currentRow++;
+            if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+              var childFile = files4[i];
+              var fileName = files4[i].getName();
+              var fileID = childFile.getId();
+              var Url = "https://drive.google.com/open?id=" + fileID;
+              var output = [5,,,,,fileName,,,,,,,,,,Url];              
+              sheet.appendRow(output);
+            }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+              return;
+            }            
+          }
+          }
+        var files3 = getSorted(childFolders3[i_2].getFiles());
+        for(i=0; i<files3.length; i++){
+
+          currentRow++;
+          if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+            var childFile = files3[i];
+            var fileName = files3[i].getName();
+            var fileID = childFile.getId();
+            var Url = "https://drive.google.com/open?id=" + fileID;
+            var output = [4,,,,fileName,,,,,,,,,,,Url];            
+            sheet.appendRow(output);
+          }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+            return;
+          }          
+        }
+      }
+      var files2 = getSorted(childFolders2[i_1].getFiles());
+      for(i=0; i<files2.length; i++){
+
+        currentRow++;
+        if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+          var childFile = files2[i];
+          var fileName = files2[i].getName();
+          var fileID = childFile.getId();
+          var Url = "https://drive.google.com/open?id=" + fileID;
+          var output = [3,,,fileName,,,,,,,,,,,,Url];          
+          sheet.appendRow(output);
+        }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+          return;
+        }        
+      }
+    }
+    var files1 = getSorted(childFolders1[i_0].getFiles());
+    for(i=0; i<files1.length; i++){
+
+      currentRow++;
+      if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+        var childFile = files1[i];
+        var fileName = files1[i].getName();
+        var fileID = childFile.getId();
+        var Url = "https://drive.google.com/open?id=" + fileID;
+        var output = [2,,fileName,,,,,,,,,,,,,Url];        
+        sheet.appendRow(output);
+      }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+        return;
+      }      
+    }
+  }
+  var files0 = getSorted(parent.getFiles());
+  for(i=0; i<files0.length; i++){
+    // if(truyenThongFlag == true){
+    //   continue;
+    // }
+
+    currentRow++;
+    if(checkStopWriting(currentRow, startNum, endNum) == '2'){
+      var childFile = files0[i];
+      var fileName = files0[i].getName();
+      var fileID = childFile.getId();
+      var Url = "https://drive.google.com/open?id=" + fileID;
+      var output = [1,fileName,,,,,,,,,,,,,,Url];      
+      sheet.appendRow(output);
+    }else if (checkStopWriting(currentRow, startNum, endNum) == '3'){
+      return;
+    }    
+  }
+}
+// ======================================================================================================
